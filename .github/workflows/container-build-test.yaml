@@ -8,6 +8,12 @@ env:
 jobs:
   docker:
     runs-on: arc-runner-set
+
+    strategy:
+      fail-fast: false
+      matrix:
+        install_latest: [ true, false ]
+            
     permissions:
       contents: read
       packages: write
@@ -18,6 +24,11 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install latest podman
+        if: matrix.install_latest
+        run: |
+          bash .github/install_latest_podman.sh
 
       - name: Extract metadata for Docker
         id: meta
